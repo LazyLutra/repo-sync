@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRepoStore, type Repo } from "../../store/useRepoStore";
-import { ListItem, Checkbox, Tag, Typography } from "ant-design-vue";
+import { ListItem, Checkbox, Typography } from "ant-design-vue";
 import Icon from "../common/Icon.vue";
 
 const props = defineProps<{

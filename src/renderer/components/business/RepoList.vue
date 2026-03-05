@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRepoStore } from "../../store/useRepoStore";
-import { Table, Tag, Typography } from "ant-design-vue";
+import { Table, Typography } from "ant-design-vue";
 import Icon from "../common/Icon.vue";
 
 const repoStore = useRepoStore();

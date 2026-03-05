@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { GitBranch, Server, Settings } from "lucide-vue-next";
 import { useAppStore } from "../../store/useAppStore";
 

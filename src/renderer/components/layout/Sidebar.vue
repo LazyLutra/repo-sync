@@ -3,7 +3,7 @@ import { useAppStore } from "../../store/useAppStore";
 import { useRepoStore } from "../../store/useRepoStore";
 import RepoList from "../business/RepoList.vue";
 import Icon from "../common/Icon.vue";
-import { Button, Space, Typography } from "ant-design-vue";
+import { Button, Typography } from "ant-design-vue";
 
 const { Title } = Typography;
 const appStore = useAppStore();

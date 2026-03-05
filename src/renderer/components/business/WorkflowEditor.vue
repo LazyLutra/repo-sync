@@ -95,7 +95,7 @@ function onDragStart(e: DragEvent, index: number) {
   }
 }
 
-function onDragEnter(e: DragEvent, index: number) {
+function onDragEnter(_e: DragEvent, index: number) {
   dragOverIndex.value = index;
 }
 
@@ -105,7 +105,7 @@ function onDragEnd() {
   draggableState.value = null;
 }
 
-function onDrop(e: DragEvent, index: number) {
+function onDrop(_e: DragEvent, index: number) {
   if (dragIndex.value !== null && dragIndex.value !== index) {
     const item = editingSteps.value.splice(dragIndex.value, 1)[0];
     editingSteps.value.splice(index, 0, item);
