@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Layout, LayoutContent, LayoutSider } from "ant-design-vue";
+import ActivityBar from "./ActivityBar.vue";
 import Sidebar from "./Sidebar.vue";
 import { useAppStore } from "../../store/useAppStore";
 
 const appStore = useAppStore();
-const collapsed = ref(false);
 const isResizing = ref(false);
+
+const isSidebarCollapsed = computed(() => {
+  return appStore.activeGlobalView !== "git";
+});
 
 function startResize(e: MouseEvent) {
   e.preventDefault();
@@ -30,9 +34,13 @@ function stopResize() {
 </script>
 
 <template>
-  <Layout class="main-layout">
+  <Layout class="main-layout" has-sider>
+    <!-- Global Navigation Activity Bar -->
+    <ActivityBar />
+
     <LayoutSider
-      v-model:collapsed="collapsed"
+      v-model:collapsed="isSidebarCollapsed"
+      :collapsedWidth="0"
       :width="appStore.sidebarWidth"
       :theme="appStore.theme"
       collapsible
@@ -40,7 +48,9 @@ function stopResize() {
       class="layout-sider"
     >
       <Sidebar />
+      <!-- Only show resizer if sidebar is not collapsed -->
       <div
+        v-if="!isSidebarCollapsed"
         class="sider-resizer"
         :class="{ resizing: isResizing }"
         @mousedown="startResize"
@@ -56,10 +66,12 @@ function stopResize() {
 <style scoped>
 .main-layout {
   height: 100vh;
+  background-color: var(--bg-primary);
 }
 .layout-sider {
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  border-right: 1px solid var(--border-color);
   position: relative;
+  background-color: var(--bg-secondary) !important;
 }
 .sider-resizer {
   position: absolute;
@@ -73,9 +85,12 @@ function stopResize() {
 }
 .sider-resizer:hover,
 .sider-resizer.resizing {
-  background-color: #1677ff;
+  background-color: var(--accent-color);
 }
 .layout-content {
   overflow: hidden;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
 }
 </style>

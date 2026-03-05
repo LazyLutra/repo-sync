@@ -33,24 +33,22 @@ async function handleSelectFolder() {
       <Title :level="4" style="margin: 0">RepoSync</Title>
 
       <!-- Theme Toggle -->
-      <Space size="small" class="theme-toggle-group">
-        <Button
-          type="text"
-          size="small"
-          :class="{ 'theme-btn-active': appStore.theme === 'dark' }"
+      <div class="theme-toggle">
+        <div
+          class="theme-btn"
+          :class="{ active: appStore.theme === 'dark' }"
           @click="toggleTheme('dark')"
         >
           <Icon name="moon" :size="14" />
-        </Button>
-        <Button
-          type="text"
-          size="small"
-          :class="{ 'theme-btn-active': appStore.theme === 'light' }"
+        </div>
+        <div
+          class="theme-btn"
+          :class="{ active: appStore.theme === 'light' }"
           @click="toggleTheme('light')"
         >
           <Icon name="sun" :size="14" />
-        </Button>
-      </Space>
+        </div>
+      </div>
     </div>
 
     <!-- Actions -->
@@ -60,6 +58,12 @@ async function handleSelectFolder() {
         block
         class="action-btn"
         @click="handleSelectFolder"
+        style="
+          background-color: var(--bg-tertiary);
+          color: var(--text-primary);
+          border: none;
+          box-shadow: none;
+        "
       >
         <template #icon><Icon name="folder-search" :size="14" /></template>
         Select Folder
@@ -94,13 +98,38 @@ async function handleSelectFolder() {
   justify-content: space-between;
   align-items: center;
 }
-.theme-toggle-group {
+.theme-toggle {
+  background-color: var(--bg-tertiary);
+  border-radius: 14px;
   padding: 2px;
-  border-radius: 6px;
+  display: flex;
+  gap: 2px;
+  width: 64px;
+  height: 28px;
+  position: relative;
 }
-.theme-btn-active {
-  background: rgba(0, 0, 0, 0.06);
-  border-radius: 4px;
+.theme-btn {
+  width: 28px;
+  height: 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.theme-btn:hover {
+  color: var(--text-primary);
+}
+.theme-btn.active {
+  background-color: var(--bg-secondary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+}
+html[data-theme="light"] .theme-btn.active,
+:root[data-theme="light"] .theme-btn.active {
+  background-color: #ffffff;
 }
 .actions-container {
   display: flex;
