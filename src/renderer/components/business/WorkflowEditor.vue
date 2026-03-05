@@ -11,11 +11,13 @@ import {
   AutoComplete,
   List,
   ListItem,
+  Tooltip,
 } from "ant-design-vue";
 import {
   DeleteOutlined,
   PlusOutlined,
   MenuOutlined,
+  InfoCircleOutlined,
 } from "@ant-design/icons-vue";
 
 const props = defineProps<{
@@ -81,6 +83,35 @@ function addStep() {
 function removeStep(index: number) {
   editingSteps.value.splice(index, 1);
 }
+
+const draggableState = ref<number | null>(null);
+const dragIndex = ref<number | null>(null);
+const dragOverIndex = ref<number | null>(null);
+
+function onDragStart(e: DragEvent, index: number) {
+  dragIndex.value = index;
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = "move";
+  }
+}
+
+function onDragEnter(e: DragEvent, index: number) {
+  dragOverIndex.value = index;
+}
+
+function onDragEnd() {
+  dragIndex.value = null;
+  dragOverIndex.value = null;
+  draggableState.value = null;
+}
+
+function onDrop(e: DragEvent, index: number) {
+  if (dragIndex.value !== null && dragIndex.value !== index) {
+    const item = editingSteps.value.splice(dragIndex.value, 1)[0];
+    editingSteps.value.splice(index, 0, item);
+  }
+  onDragEnd(); // Reset states
+}
 </script>
 
 <template>
@@ -94,9 +125,25 @@ function removeStep(index: number) {
     <div class="editor-body">
       <List :data-source="editingSteps" :split="false" class="custom-step-list">
         <template #renderItem="{ item, index }">
-          <ListItem class="step-card">
+          <ListItem
+            class="step-card"
+            :class="{
+              dragging: dragIndex === index,
+              'drag-over': dragOverIndex === index,
+            }"
+            :draggable="draggableState === index"
+            @dragstart="onDragStart($event, index)"
+            @dragover.prevent
+            @dragenter.prevent="onDragEnter($event, index)"
+            @dragend="onDragEnd"
+            @drop="onDrop($event, index)"
+          >
             <div class="step-row">
-              <MenuOutlined class="drag-handle" />
+              <MenuOutlined
+                class="drag-handle"
+                @mouseenter="draggableState = index"
+                @mouseleave="draggableState = null"
+              />
 
               <Select
                 v-model:value="item.type"
@@ -125,7 +172,7 @@ function removeStep(index: number) {
                     :options="historyBranches"
                     placeholder="Target (master)"
                     size="small"
-                    style="width: 160px"
+                    style="width: 145px"
                   />
                   <span>←</span>
                   <AutoComplete
@@ -133,8 +180,11 @@ function removeStep(index: number) {
                     :options="historyBranches"
                     placeholder="Source (feature)"
                     size="small"
-                    style="width: 160px"
+                    style="width: 145px"
                   />
+                  <Tooltip title="将Source的代码合并到Target上。">
+                    <InfoCircleOutlined style="color: #8c8c8c; cursor: help" />
+                  </Tooltip>
                 </Space>
 
                 <Input
@@ -174,10 +224,10 @@ function removeStep(index: number) {
 .editor-body {
   display: flex;
   flex-direction: column;
-  background: #fdfdfd;
+  background: var(--bg-secondary);
   padding: 12px;
   border-radius: 8px;
-  border: 1px dashed rgba(0, 0, 0, 0.08);
+  border: 1px dashed var(--border-color);
 }
 .steps-container {
   display: flex;
@@ -225,15 +275,23 @@ function removeStep(index: number) {
   margin-top: 16px;
 }
 .step-card {
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 12px 14px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
   transition: all 0.2s;
 }
+.step-card.dragging {
+  opacity: 0.5;
+  background: var(--bg-secondary);
+}
+.step-card.drag-over {
+  border-top: 2px solid var(--accent-color);
+}
 .step-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  border-color: rgba(22, 119, 255, 0.2);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
 }
 </style>

@@ -135,28 +135,29 @@ const groupedLogs = computed(() => {
 .log-content {
   flex: 1;
   overflow-y: auto;
-  font-family: "Menlo", "Monaco", "Courier New", monospace;
-  font-size: 13px;
-  padding: 12px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  font-family: "JetBrains Mono", "Menlo", "Monaco", "Courier New", monospace;
+  font-size: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 .log-empty {
-  color: #999;
+  color: var(--text-secondary);
 }
 .repo-group {
   margin-bottom: 16px;
-  background: #ffffff;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: var(--bg-primary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
   overflow: hidden;
 }
 .repo-header {
   padding: 8px 12px;
-  background: #f8f9fa;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -183,7 +184,7 @@ const groupedLogs = computed(() => {
   top: 14px;
   bottom: -14px;
   width: 2px;
-  background: #f0f0f0;
+  background: var(--border-color);
 }
 .log-step:last-child::before {
   display: none;
@@ -198,8 +199,8 @@ const groupedLogs = computed(() => {
 }
 .step-command {
   font-weight: 600;
-  color: #1f1f1f;
-  background: #f0f0f0;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 12px;
@@ -212,16 +213,16 @@ const groupedLogs = computed(() => {
   padding: 8px 12px;
   white-space: pre-wrap;
   word-break: break-all;
-  color: #333;
-  background: #fafafa;
-  border: 1px solid #f0f0f0;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 12px;
 }
 .step-output.is-error {
-  color: #ff4d4f;
-  background: #fff1f0;
-  border-color: #ffccc7;
+  color: var(--log-error);
+  background: rgba(255, 69, 58, 0.1);
+  border-color: rgba(255, 69, 58, 0.2);
 }
 
 /* Status dots */
@@ -233,16 +234,16 @@ const groupedLogs = computed(() => {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #d9d9d9;
+  background: var(--border-color);
 }
 .status-running::after {
-  background: #1677ff;
-  box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.2);
+  background: var(--log-info);
+  box-shadow: 0 0 0 2px rgba(100, 210, 255, 0.2);
 }
 .status-success::after {
-  background: #52c41a;
+  background: var(--log-success);
 }
 .status-error::after {
-  background: #ff4d4f;
+  background: var(--log-error);
 }
 </style>

@@ -100,7 +100,10 @@ async function runWorkflow() {
       </Space>
     </template>
 
-    <div class="steps-container">
+    <div
+      v-if="workflowStore.currentWorkflow.steps.length > 0"
+      class="steps-container"
+    >
       <Steps
         :current="currentStepIndex"
         status="process"
@@ -119,6 +122,11 @@ async function runWorkflow() {
         />
       </Steps>
     </div>
+    <div v-else class="empty-steps-container">
+      <div style="color: var(--text-secondary); font-size: 13px">
+        No workflow steps configured. Click Edit to add steps.
+      </div>
+    </div>
 
     <WorkflowEditor :is-open="isEditorOpen" @close="isEditorOpen = false" />
   </Card>
@@ -127,9 +135,9 @@ async function runWorkflow() {
 <style scoped>
 .steps-container {
   padding: 16px 24px;
-  background: #fdfdfd;
+  background: var(--bg-secondary);
   border-radius: 8px;
-  border: 1px dashed rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
 }
 :deep(.ant-steps) {
   flex-wrap: wrap;
@@ -143,5 +151,12 @@ async function runWorkflow() {
 :deep(.ant-steps-item-title) {
   font-size: 13px !important;
   font-weight: 500;
+}
+.empty-steps-container {
+  padding: 24px;
+  text-align: center;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px dashed var(--border-color);
 }
 </style>

@@ -29,10 +29,10 @@ function toggleSelection() {
       </div>
 
       <!-- Git Branch Placeholder -->
-      <Tag class="branch-tag" :bordered="false" color="processing">
+      <div class="branch-badge">
         <Icon name="git-branch" :size="12" />
         {{ repo.currentBranch || "loading..." }}
-      </Tag>
+      </div>
     </div>
   </ListItem>
 </template>
@@ -41,13 +41,16 @@ function toggleSelection() {
 .repo-item {
   cursor: pointer;
   transition: background-color 0.2s;
-  padding: 8px 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background-color: var(--bg-primary);
+  border: 1px solid transparent;
 }
 .repo-item:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--bg-hover);
 }
 .repo-item-selected {
-  background-color: rgba(22, 119, 255, 0.06);
+  border-color: var(--accent-color);
 }
 .repo-item-inner {
   display: flex;
@@ -77,10 +80,23 @@ function toggleSelection() {
   align-items: center;
   gap: 4px;
 }
-.branch-tag {
-  margin: 0;
-  display: inline-flex;
+.branch-badge {
+  background-color: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  width: fit-content;
+  display: flex;
   align-items: center;
   gap: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative;
+  flex-shrink: 0;
+}
+.branch-badge:hover {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 </style>

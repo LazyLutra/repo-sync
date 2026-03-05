@@ -63,10 +63,10 @@ const rowSelection = computed(() => ({
           </div>
         </template>
         <template v-else-if="column.key === 'currentBranch'">
-          <Tag :bordered="false" color="processing" class="branch-tag">
+          <div class="branch-badge">
             <Icon name="git-branch" :size="12" />
             {{ record.currentBranch || "..." }}
-          </Tag>
+          </div>
         </template>
       </template>
     </Table>
@@ -98,11 +98,25 @@ const rowSelection = computed(() => ({
   align-items: center;
   gap: 4px;
 }
-.branch-tag {
-  margin: 0;
-  display: inline-flex;
+.branch-badge {
+  background-color: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  width: fit-content;
+  display: flex;
   align-items: center;
   gap: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative;
+  flex-shrink: 0;
+  float: right;
+}
+.branch-badge:hover {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 /* Remove table border styles to make it look clean */
@@ -112,16 +126,23 @@ const rowSelection = computed(() => ({
 }
 :deep(.ant-table-thead > tr > th) {
   background: transparent !important;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.08) !important;
+  color: var(--text-secondary) !important;
+  border-bottom: 1px dashed var(--border-color) !important;
 }
 :deep(.ant-table-tbody > tr > td) {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04) !important;
+  border-bottom: 1px solid var(--border-color) !important;
   padding: 8px 4px !important;
+  color: var(--text-primary);
+  transition: background-color 0.2s;
 }
 :deep(.ant-table-tbody > tr.ant-table-row-selected > td) {
-  background: rgba(22, 119, 255, 0.04) !important;
+  background: var(--bg-hover) !important;
 }
 :deep(.ant-table-tbody > tr:hover > td) {
-  background: rgba(0, 0, 0, 0.02) !important;
+  background: var(--bg-hover) !important;
+}
+:deep(.ant-table-placeholder) {
+  background: transparent !important;
+  color: var(--text-secondary);
 }
 </style>
