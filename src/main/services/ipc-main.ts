@@ -40,6 +40,15 @@ export function registerIpcHandlers() {
     return stopServiceProcess(serviceId)
   })
 
+  ipcMain.handle(IPC_CHANNELS.GET_ENV_SERVICES, async () => {
+    return configStore.getEnvServices()
+  })
+
+  ipcMain.handle(IPC_CHANNELS.SAVE_ENV_SERVICES, async (_event, services: any[]) => {
+    configStore.setEnvServices(services)
+    return true
+  })
+
   ipcMain.handle(IPC_CHANNELS.SCAN_REPOS, async (_event, rootPath: string) => {
     if (!rootPath) return []
     configStore.setLastRootPath(rootPath)

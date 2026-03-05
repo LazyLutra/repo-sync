@@ -59,6 +59,24 @@ export interface BatchResult {
   error?: string
 }
 
+/** 持久化保存的环境服务 */
+export interface SavedEnvService {
+  /** 服务 ID */
+  id: string
+  /** 服务类型 */
+  type: 'nacos' | 'redis' | 'nginx' | 'unknown'
+  /** 显示名称 */
+  name: string
+  /** 端口 */
+  port: number
+  /** 服务所在目录 */
+  dirPath: string
+  /** 启动命令 */
+  startCommand: string
+  /** 配置文件相对路径 */
+  configFilePath: string
+}
+
 /** 应用配置 */
 export interface AppConfig {
   /** 上次选择并成功扫描的父文件夹路径 */
@@ -67,4 +85,6 @@ export interface AppConfig {
   concurrency: number
   /** 忽略扫描的目录（来自常量） */
   ignoreDirs: string[]
+  /** 已添加的环境服务列表 */
+  envServices?: SavedEnvService[]
 }

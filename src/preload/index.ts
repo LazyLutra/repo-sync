@@ -38,6 +38,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // 环境服务进程管理
   startEnvService: (payload: { serviceId: string, dirPath: string, startCommand: string }) => ipcRenderer.invoke('start-env-service', payload),
   stopEnvService: (serviceId: string) => ipcRenderer.invoke('stop-env-service', serviceId),
+  getEnvServices: () => ipcRenderer.invoke('get-env-services'),
+  saveEnvServices: (services: any[]) => ipcRenderer.invoke('save-env-services', services),
   onEnvServiceLog: (callback: (payload: any) => void) => {
     ipcRenderer.on('env-service-log', (_event, payload) => callback(payload))
   },

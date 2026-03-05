@@ -123,9 +123,39 @@ async function toggleService(service: EnvService) {
   }
 }
 
-// 监听主进程推送过来的实时日志和退出事件
-onMounted(() => {
+// 持久化保存服务列表（只保存必要字段，不含运行时状态）
+function saveServices() {
   const api = (window as any).electronAPI;
+  const data = services.value.map((s) => ({
+    id: s.id,
+    type: s.type,
+    name: s.name,
+    port: s.port,
+    dirPath: s.dirPath,
+    startCommand: s.startCommand,
+    configFilePath: s.configFilePath,
+  }));
+  api.saveEnvServices(data);
+}
+
+// 监听主进程推送过来的实时日志和退出事件，并加载已保存的服务
+onMounted(async () => {
+  const api = (window as any).electronAPI;
+
+  // 从持久化存储加载已保存的服务列表
+  try {
+    const saved = await api.getEnvServices();
+    if (saved && saved.length > 0) {
+      services.value = saved.map((s: any) => ({
+        ...s,
+        isRunning: false,
+        statusText: "Stopped",
+      }));
+      addServiceLog(`已加载 ${saved.length} 个已保存的服务`, "info");
+    }
+  } catch (err: any) {
+    console.error("加载已保存服务失败:", err);
+  }
 
   api.onEnvServiceLog((payload: any) => {
     const service = services.value.find((s) => s.id === payload.serviceId);
@@ -205,6 +235,7 @@ function openCmdModal(service: EnvService) {
 function saveCmdModal() {
   if (cmdEditingService) {
     cmdEditingService.startCommand = cmdContent.value;
+    saveServices();
     message.success("启动命令已更新");
     addServiceLog(
       `[${cmdEditingService.name}] 启动命令已设置为: ${cmdContent.value}`,
@@ -246,6 +277,7 @@ async function handleAddService() {
       };
 
       services.value.push(newService);
+      saveServices();
       addServiceLog(
         `Successfully identified and added ${newService.name}.`,
         "success",

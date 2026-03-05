@@ -31,6 +31,8 @@ export const IPC_CHANNELS = {
   STOP_ENV_SERVICE: 'stop-env-service',
   ENV_SERVICE_LOG: 'env-service-log',
   ENV_SERVICE_EXIT: 'env-service-exit',
+  GET_ENV_SERVICES: 'get-env-services',
+  SAVE_ENV_SERVICES: 'save-env-services',
 
   // 窗口控制
   WINDOW_MINIMIZE: 'window-minimize',
