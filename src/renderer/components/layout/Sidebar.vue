@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { useAppStore } from "../../store/useAppStore";
 import { useRepoStore } from "../../store/useRepoStore";
 import RepoList from "../business/RepoList.vue";
@@ -8,6 +9,11 @@ import { Button, Typography } from "ant-design-vue";
 const { Title } = Typography;
 const appStore = useAppStore();
 const repoStore = useRepoStore();
+
+// 应用启动时自动恢复上次选择的文件夹
+onMounted(() => {
+  repoStore.init();
+});
 
 function toggleTheme(theme: "dark" | "light") {
   appStore.toggleTheme(theme);
