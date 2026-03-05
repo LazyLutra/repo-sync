@@ -23,6 +23,15 @@ export const IPC_CHANNELS = {
   // Git操作相关
   REFRESH_GIT_STATUS: 'refresh-git-status',
 
+  // Environment Services
+  ANALYZE_ENV_DIR: 'analyze-env-dir',
+  READ_ENV_CONFIG: 'read-env-config',
+  WRITE_ENV_CONFIG: 'write-env-config',
+  START_ENV_SERVICE: 'start-env-service',
+  STOP_ENV_SERVICE: 'stop-env-service',
+  ENV_SERVICE_LOG: 'env-service-log',
+  ENV_SERVICE_EXIT: 'env-service-exit',
+
   // 窗口控制
   WINDOW_MINIMIZE: 'window-minimize',
   WINDOW_MAXIMIZE: 'window-maximize',

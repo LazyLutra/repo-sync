@@ -3,6 +3,8 @@ import { IPC_CHANNELS } from '../../ipc/channel'
 import { configStore } from './store'
 import { scanRepos, refreshGitStatus } from './scanner'
 import { runStep, formatGitCommand } from './git-runner'
+import { analyzeEnvironmentDir, readEnvConfig, writeEnvConfig } from './env-scanner'
+import { startServiceProcess, stopServiceProcess } from './env-process-manager'
 
 // Mocking Workflow interface if not visible here
 interface Workflow { id: string; name: string; steps: any[] }
@@ -13,6 +15,29 @@ export function registerIpcHandlers() {
       properties: ['openDirectory']
     })
     return canceled ? null : filePaths[0]
+  })
+
+  ipcMain.handle(IPC_CHANNELS.ANALYZE_ENV_DIR, async (_event, dirPath: string) => {
+    if (!dirPath) return null
+    return await analyzeEnvironmentDir(dirPath)
+  })
+
+  ipcMain.handle(IPC_CHANNELS.READ_ENV_CONFIG, async (_event, filePath: string) => {
+    if (!filePath) return ''
+    return await readEnvConfig(filePath)
+  })
+
+  ipcMain.handle(IPC_CHANNELS.WRITE_ENV_CONFIG, async (_event, filePath: string, content: string) => {
+    if (!filePath) return false
+    return await writeEnvConfig(filePath, content)
+  })
+
+  ipcMain.handle(IPC_CHANNELS.START_ENV_SERVICE, async (_event, payload: { serviceId: string, dirPath: string, startCommand: string }) => {
+    return startServiceProcess(payload.serviceId, payload.dirPath, payload.startCommand)
+  })
+
+  ipcMain.handle(IPC_CHANNELS.STOP_ENV_SERVICE, async (_event, serviceId: string) => {
+    return stopServiceProcess(serviceId)
   })
 
   ipcMain.handle(IPC_CHANNELS.SCAN_REPOS, async (_event, rootPath: string) => {
