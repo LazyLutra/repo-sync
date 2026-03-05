@@ -5,6 +5,7 @@
   "type": "module",
   "author": "LazyLutra",
   "description": "A lightweight, cross-platform Git repository batch management tool.",
+  "license": "GPL-3.0",
   "keywords": [
     "git",
     "electron",
