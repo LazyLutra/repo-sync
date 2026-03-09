@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, dialog } from "electron";
 
 // Disable security warnings in development
 if (process.env.NODE_ENV === "development" || process.env.VITE_DEV_SERVER_URL) {
@@ -40,6 +40,7 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   : RENDERER_DIST;
 
 let win: BrowserWindow | null;
+let allowAppQuit = false;
 
 async function waitForDevServer(
   url: string,
@@ -92,6 +93,52 @@ async function createWindow() {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
   });
 
+  win.on("close", async (event) => {
+    if (allowAppQuit) {
+      return;
+    }
+
+    const { getRunningServiceCount, hasRunningServices, stopAllServiceProcesses } =
+      await import("./services/env-process-manager");
+
+    if (!hasRunningServices()) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const runningCount = getRunningServiceCount();
+    const currentWindow = win;
+    if (!currentWindow) {
+      return;
+    }
+
+    const { response } = await dialog.showMessageBox(currentWindow, {
+      type: "warning",
+      title: "检测到本地服务仍在运行",
+      message: "请先确认如何处理正在运行的服务",
+      detail: `当前有 ${runningCount} 个本地服务正在运行。`,
+      buttons: ["关闭服务并退出", "仅退出应用", "取消"],
+      defaultId: 0,
+      cancelId: 2,
+      noLink: true,
+    });
+
+    if (response === 0) {
+      stopAllServiceProcesses();
+      allowAppQuit = true;
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      app.quit();
+      return;
+    }
+
+    if (response === 1) {
+      allowAppQuit = true;
+      app.quit();
+      return;
+    }
+  });
+
   if (VITE_DEV_SERVER_URL) {
     await waitForDevServer(VITE_DEV_SERVER_URL);
     win.loadURL(VITE_DEV_SERVER_URL);
@@ -106,6 +153,7 @@ async function createWindow() {
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
+    allowAppQuit = true;
     app.quit();
     win = null;
   }

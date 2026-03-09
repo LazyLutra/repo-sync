@@ -115,3 +115,29 @@ export function stopServiceProcess(serviceId: string): boolean {
 export function isServiceRunning(serviceId: string): boolean {
   return runningProcesses.has(serviceId)
 }
+
+/**
+ * 是否存在正在运行的服务
+ */
+export function hasRunningServices(): boolean {
+  return runningProcesses.size > 0
+}
+
+/**
+ * 获取正在运行的服务数量
+ */
+export function getRunningServiceCount(): number {
+  return runningProcesses.size
+}
+
+/**
+ * 停止所有正在运行的服务
+ * @returns 实际尝试停止的服务数量
+ */
+export function stopAllServiceProcesses(): number {
+  const serviceIds = Array.from(runningProcesses.keys())
+  for (const serviceId of serviceIds) {
+    stopServiceProcess(serviceId)
+  }
+  return serviceIds.length
+}
