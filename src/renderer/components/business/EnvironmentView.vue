@@ -146,12 +146,25 @@ onMounted(async () => {
   try {
     const saved = await api.getEnvServices();
     if (saved && saved.length > 0) {
-      services.value = saved.map((s: any) => ({
+      const runningStates = await Promise.all(
+        saved.map((s: any) =>
+          api
+            .isEnvServiceRunning(s.id)
+            .catch(() => false),
+        ),
+      );
+
+      services.value = saved.map((s: any, index: number) => ({
         ...s,
-        isRunning: false,
-        statusText: "Stopped",
+        isRunning: runningStates[index],
+        statusText: runningStates[index] ? "Running" : "Stopped",
       }));
       addServiceLog(`已加载 ${saved.length} 个已保存的服务`, "info");
+
+      const runningCount = runningStates.filter(Boolean).length;
+      if (runningCount > 0) {
+        addServiceLog(`检测到 ${runningCount} 个服务正在运行`, "success");
+      }
     }
   } catch (err: any) {
     console.error("加载已保存服务失败:", err);

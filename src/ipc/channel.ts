@@ -29,6 +29,7 @@ export const IPC_CHANNELS = {
   WRITE_ENV_CONFIG: 'write-env-config',
   START_ENV_SERVICE: 'start-env-service',
   STOP_ENV_SERVICE: 'stop-env-service',
+  IS_ENV_SERVICE_RUNNING: 'is-env-service-running',
   ENV_SERVICE_LOG: 'env-service-log',
   ENV_SERVICE_EXIT: 'env-service-exit',
   GET_ENV_SERVICES: 'get-env-services',

@@ -4,7 +4,7 @@ import { configStore } from './store'
 import { scanRepos, refreshGitStatus } from './scanner'
 import { runStep, formatGitCommand } from './git-runner'
 import { analyzeEnvironmentDir, readEnvConfig, writeEnvConfig } from './env-scanner'
-import { startServiceProcess, stopServiceProcess } from './env-process-manager'
+import { isServiceRunning, startServiceProcess, stopServiceProcess } from './env-process-manager'
 
 // Mocking Workflow interface if not visible here
 interface Workflow { id: string; name: string; steps: any[] }
@@ -38,6 +38,11 @@ export function registerIpcHandlers() {
 
   ipcMain.handle(IPC_CHANNELS.STOP_ENV_SERVICE, async (_event, serviceId: string) => {
     return stopServiceProcess(serviceId)
+  })
+
+  ipcMain.handle(IPC_CHANNELS.IS_ENV_SERVICE_RUNNING, async (_event, serviceId: string) => {
+    if (!serviceId) return false
+    return isServiceRunning(serviceId)
   })
 
   ipcMain.handle(IPC_CHANNELS.GET_ENV_SERVICES, async () => {
