@@ -31,6 +31,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   scanRepos: (path: string) => ipcRenderer.invoke('scan-repos', path),
   getConfig: () => ipcRenderer.invoke('get-config'),
   refreshGitStatus: (path: string) => ipcRenderer.invoke('refresh-git-status', path),
+  getWorkflow: () => ipcRenderer.invoke('get-workflow'),
+  saveWorkflow: (workflow: any) => ipcRenderer.invoke('save-workflow', workflow),
   startBatch: (repoPaths: string[], workflow: any) => ipcRenderer.invoke('start-batch', { repoPaths, workflow }),
   onBatchProgress: (callback: (payload: any) => void) => {
     ipcRenderer.on('batch-progress', (_event, payload) => callback(payload))

@@ -11,11 +11,29 @@ export const useWorkflowStore = defineStore('workflow', () => {
     updatedAt: new Date().toISOString()
   })
 
+  // @ts-ignore
+  if (window.electronAPI && window.electronAPI.getWorkflow) {
+    // @ts-ignore
+    window.electronAPI.getWorkflow().then((saved: any) => {
+      if (saved && saved.steps) {
+        currentWorkflow.value = saved
+      }
+    }).catch((err: any) => console.error("Failed to load workflow", err))
+  }
+
+
+
   const isRunning = ref(false)
   const currentStepId = ref<string | null>(null)
 
   function updateSteps(newSteps: TaskStep[]) {
     currentWorkflow.value.steps = newSteps
+    // @ts-ignore
+    if (window.electronAPI && window.electronAPI.saveWorkflow) {
+      // @ts-ignore
+      window.electronAPI.saveWorkflow(JSON.parse(JSON.stringify(currentWorkflow.value)))
+        .catch((err: any) => console.error("Failed to save workflow", err))
+    }
   }
 
   function setRunning(running: boolean) {

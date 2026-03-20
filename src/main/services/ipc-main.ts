@@ -60,6 +60,15 @@ export function registerIpcHandlers() {
     return await scanRepos(rootPath)
   })
 
+  ipcMain.handle(IPC_CHANNELS.GET_WORKFLOW, async () => {
+    return configStore.getWorkflow()
+  })
+
+  ipcMain.handle(IPC_CHANNELS.SAVE_WORKFLOW, async (_event, workflow: any) => {
+    configStore.setWorkflow(workflow)
+    return true
+  })
+
   ipcMain.handle(IPC_CHANNELS.GET_CONFIG, () => {
     return configStore.getConfig()
   })

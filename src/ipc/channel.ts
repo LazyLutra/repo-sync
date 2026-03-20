@@ -19,6 +19,10 @@ export const IPC_CHANNELS = {
   // 应用配置
   GET_CONFIG: 'get-config',
   SET_CONFIG: 'set-config',
+
+  // 工作流相关
+  GET_WORKFLOW: 'get-workflow',
+  SAVE_WORKFLOW: 'save-workflow',
   
   // Git操作相关
   REFRESH_GIT_STATUS: 'refresh-git-status',

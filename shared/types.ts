@@ -87,4 +87,6 @@ export interface AppConfig {
   ignoreDirs: string[]
   /** 已添加的环境服务列表 */
   envServices?: SavedEnvService[]
+  /** 保存配置好的工作流 */
+  savedWorkflow?: Workflow
 }
